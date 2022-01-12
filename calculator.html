@@ -23,8 +23,8 @@
       <button @click="operation('*')">*</button>
       <button @click="operation('/')">/</button>
       <br/>
-      <button >reset</button>
-      <button >=</button>
+      <button @click="reset">reset</button>
+      <button @click="equal">=</button>
     </div>
   </div>
   <script src="https://unpkg.com/vue@next"></script>
@@ -48,6 +48,25 @@
           this.initialValue = "0";
           this.operator = value;
         },
+        equal() {
+          switch(this.operator){
+            case "+":
+              this.initialValue = `${this.savedValue + Number(this.initialValue)}`;
+              break;
+            case "-":
+              this.initialValue = `${this.savedValue - Number(this.initialValue)}`;
+              break;
+            case "*":
+              this.initialValue = `${this.savedValue * Number(this.initialValue)}`;
+              break;
+            case "/":
+              this.initialValue = `${this.savedValue / Number(this.initialValue)}`;
+              break;
+          }
+        },
+        reset() {
+          this.initialValue = "0";
+        }
       },
       computed: {
         screenValue() {
