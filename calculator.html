@@ -71,6 +71,9 @@
       computed: {
         screenValue() {
           let stringArray = this.initialValue.toString().split('')
+          let isNegative = stringArray.includes('-')
+          if (isNegative) stringArray.shift()
+
           let result = []
           stringArray.forEach((value, index) => { // 讓大家想演算法
             if(index != 0 && index % 3 == stringArray.length % 3){
@@ -94,6 +97,7 @@
 
           // 0,1,2,3,4,5,6,7
           // 2,5
+          if (isNegative) result.unshift('-')
           return result.join('')
         },
       }
