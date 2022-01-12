@@ -16,12 +16,12 @@
       <template v-for="num in 9">
         <button @click="addNum(num)">{{ num }}</button>
       </template>
-      <button >0</button>
+      <button @click="addNum(0)">0</button>
       <br/>
-      <button >+</button>
-      <button >-</button>
-      <button >*</button>
-      <button >/</button>
+      <button @click="operation('+')">+</button>
+      <button @click="operation('-')">-</button>
+      <button @click="operation('*')">*</button>
+      <button @click="operation('/')">/</button>
       <br/>
       <button >reset</button>
       <button >=</button>
@@ -33,6 +33,8 @@
       data() {
         return {
           initialValue: "0",
+          savedValue: 0,
+          operator: ""
         };
       },
       methods: {
@@ -40,6 +42,11 @@
           if (this.initialValue == "0") {
             this.initialValue = value;
           } else this.initialValue += value.toString();
+        },
+        operation(value) {
+          this.savedValue = Number(this.initialValue);
+          this.initialValue = "0";
+          this.operator = value;
         },
       },
       computed: {
