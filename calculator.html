@@ -33,6 +33,7 @@ span{
           <input type="checkbox"  v-model="item.completed"> &nbsp;
           <label>{{item.title}}</label>&nbsp;
           <button @click="editTodo(item)">編輯</button>
+          <button @click="removeTodo(item)">刪除</button>
         </template>
         <input type="text"
                v-model="cacheTitle" 
@@ -93,6 +94,9 @@ span{
         initCacheTodo: function(){
           this.cacheTitle = '';
           this.cacheTodo = {}
+        },
+        removeTodo: function(todo){
+          this.todos = this.todos.filter((item) => todo.id != item.id)
         },
       },
       computed: {
