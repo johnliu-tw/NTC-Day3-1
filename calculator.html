@@ -22,9 +22,15 @@ span{
       <input type="text" @keyup.enter.exact="addTodo" v-model.trim="task" placeholder="準備要做的任務">
       <button type="button" v-text="addText" @click="addTodo">{{ addText }}</button>
     </div>
+    <div>
+      <a :class="{'active': visibility == 'all'}" @click="visibility='all'" href="#">全部</a> &nbsp;
+      <a :class="{'active': visibility == 'active'}" @click="visibility='active'" href="#">進行中</a> &nbsp;
+      <a :class="{'active': visibility == 'completed'}" @click="visibility='completed'" href="#">已完成</a> &nbsp;
+    </div>
     <ul >
-      <li v-for="item in todos">
-        <label>{{item}}</label>&nbsp;
+      <li v-for="(item, key) in filteredTodos">
+        <input type="checkbox"  v-model="item.completed"> &nbsp;
+        <label>{{item.title}}</label>&nbsp;
       </li>
     </ul>
   </div>
@@ -35,7 +41,13 @@ span{
         return{
           task: '',
           addText: '新增事項',
-          todos:[]
+          todos:[
+            {
+              title: '待辦事項1',
+              completed: true
+            }
+          ],
+          visibility: 'all',
         }
       },
       methods: {
@@ -44,11 +56,29 @@ span{
           if(!value){
             return;
           }
-          this.todos.push(value)
+          this.todos.push({
+            title: value,
+            completed: false
+          })
           this.task = '';
 
           if(this.todos.length > 5){
             this.addText = '新增事項(已超過 5個)'
+          }
+        },
+      },
+      computed: {
+      filteredTodos : function(){
+          switch(this.visibility){
+            case 'all':
+              return this.todos;
+              break;
+            case 'active':
+              return this.todos.filter((item) => !item.completed);
+              break;
+            case 'completed':
+              return this.todos.filter((item) => item.completed);
+              break;
           }
         },
       }
