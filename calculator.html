@@ -11,9 +11,10 @@
     <header>
       <h1>Simple Calculator</h1>
     </header>
+    <div>{{ screenValue }}</div>
     <div>
       <template v-for="num in 9">
-        <button >{{ num }}</button>
+        <button @click="addNum(num)">{{ num }}</button>
       </template>
       <button >0</button>
       <br/>
@@ -28,7 +29,49 @@
   </div>
   <script src="https://unpkg.com/vue@next"></script>
   <script>
-    Vue.createApp({}).mount('#app')
+    Vue.createApp({
+      data() {
+        return {
+          initialValue: "0",
+        };
+      },
+      methods: {
+        addNum(value) {
+          if (this.initialValue == "0") {
+            this.initialValue = value;
+          } else this.initialValue += value.toString();
+        },
+      },
+      computed: {
+        screenValue() {
+          let stringArray = this.initialValue.toString().split('')
+          let result = []
+          stringArray.forEach((value, index) => { // 讓大家想演算法
+            if(index != 0 && index % 3 == stringArray.length % 3){
+              result.push(',')
+            }
+            result.push(value)
+          })
+          // 0,1
+          // 0,1,2
+          // 0,1,2,3
+          // 1
+
+          // 0,1,2,3,4
+          // 2
+
+          // 0,1,2,3,4,5
+          // 3
+
+          // 0,1,2,3,4,5,6
+          // 1,4
+
+          // 0,1,2,3,4,5,6,7
+          // 2,5
+          return result.join('')
+        },
+      }
+    }).mount('#app')
   </script>
 </body>
 </html>
