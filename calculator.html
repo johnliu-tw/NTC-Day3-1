@@ -17,12 +17,42 @@ span{
 </style>
 <body>
   <div id="app">
+    <div>
+      <p>待辦事項</p>
+      <input type="text" @keyup.enter.exact="addTodo" v-model.trim="task" placeholder="準備要做的任務">
+      <button type="button" v-text="addText" @click="addTodo">{{ addText }}</button>
+    </div>
+    <ul >
+      <li v-for="item in todos">
+        <label>{{item}}</label>&nbsp;
+      </li>
+    </ul>
   </div>
   <script src="https://unpkg.com/vue@next"></script>
   <script>
-    Vue.createApp(
-    {}
-    ).mount('#app')
+    Vue.createApp({
+      data(){
+        return{
+          task: '',
+          addText: '新增事項',
+          todos:[]
+        }
+      },
+      methods: {
+        addTodo: function(){
+          var value = this.task;
+          if(!value){
+            return;
+          }
+          this.todos.push(value)
+          this.task = '';
+
+          if(this.todos.length > 5){
+            this.addText = '新增事項(已超過 5個)'
+          }
+        },
+      }
+    }).mount('#app')
   </script>
 </body>
 </html>
