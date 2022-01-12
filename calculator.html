@@ -42,6 +42,10 @@ span{
                v-if="item.id == cacheTodo.id">
       </li>
     </ul>
+    <div>
+        <span>還有 {{ undoneTodos.length }} 筆任務未完成</span> &nbsp;
+        <a href="#" @click="removeAll">清除所有任務</a>
+    </div> 
   </div>
   <script src="https://unpkg.com/vue@next"></script>
   <script>
@@ -98,9 +102,12 @@ span{
         removeTodo: function(todo){
           this.todos = this.todos.filter((item) => todo.id != item.id)
         },
+        removeAll: function(){
+          this.todos = [];
+        }
       },
       computed: {
-      filteredTodos : function(){
+        filteredTodos : function(){
           switch(this.visibility){
             case 'all':
               return this.todos;
@@ -113,6 +120,9 @@ span{
               break;
           }
         },
+        undoneTodos: function(){
+          return this.todos.filter(todo =>todo.completed != true);
+        }
       }
     }).mount('#app')
   </script>
