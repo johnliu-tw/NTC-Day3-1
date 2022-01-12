@@ -6,21 +6,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
-<style>
-.active{
-  color: firebrick;
-}
-span{
-  display: inline-block;
-  margin-left: 20px;
-}
-</style>
 <body>
   <div id="app">
+    <header>
+      <h1>Simple Calculator</h1>
+    </header>
+    <div>
+      <template v-for="num in 9">
+        <button >{{ num }}</button>
+      </template>
+      <button >0</button>
+      <br/>
+      <button >+</button>
+      <button >-</button>
+      <button >*</button>
+      <button >/</button>
+      <br/>
+      <button >reset</button>
+      <button >=</button>
+    </div>
   </div>
   <script src="https://unpkg.com/vue@next"></script>
   <script>
-    Vue.createApp().mount('#app')
+    Vue.createApp({}).mount('#app')
   </script>
 </body>
 </html>
