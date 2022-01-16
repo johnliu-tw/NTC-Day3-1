@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script src="https://unpkg.com/vue@next"></script>
+
+
+
+  <div id="app">
+    <ul v-for="post in posts">
+      <li>{{ post.title }}</li>
+      <li>{{ post.author }}</li>
+    </ul>
+    <post-component v-for="post in posts" :title='post.title' :author='post.author'></post-component>
+    <post-component v-for="post in posts" v-bind='post'></post-component>
+  </div>
+
+  <script type="text/x-template" id="post">
+    <div>標題: <input type="text" v-model="title"></div>
+    <div>作者: <input type="text" v-model="author"></div>
+  </script>
+
+  <script>
+    const app = Vue.createApp({
+      data(){
+        return {
+          posts: [
+            {
+              title: '第一篇文章',
+              author: 'John'
+            },
+            {
+              title: '第二篇文章',
+              author: 'Tim'
+            }
+          ]
+        }
+      }
+    })
+    app.component('post-component', {
+      template: '#post',
+      props: {
+        'title':{
+          type: String
+        },
+        'author':{
+          type: String
+        }
+      }
+    })
+    app.mount('#app')
+  </script>
+
+
+
+
+
+</body>
+</html>
