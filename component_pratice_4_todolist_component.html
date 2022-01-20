@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+a{
+  display: inline-block;
+  margin-left: 10px;
+}
+.active{
+  color: firebrick;
+}
+span{
+  display: inline-block;
+  margin-left: 20px;
+}
+</style>
+<body>
+  <div id="app">
+
+    <todolist></todolist>
+    <todolist :limit-number='5' :status-list='statusList'></todolist>
+    
+  </div>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script type="text/x-template" id="todolist">
+    <div>
+      <p>待辦事項</p>
+      <input type="text" @keyup.enter.exact="addTodo" v-model.trim="task" placeholder="準備要做的任務">
+      <button type="button" @click="addTodo">{{ addText }}</button>
+    </div>
+    <div>
+      <a v-for="status in statusList" 
+        :class="{'active': visibility == status.value}"
+        @click="visibility = status.value"
+        v-text="status.name"
+        href="#"></a>
+    </div>
+    <ul >
+      <li v-for="(item, key) in filteredTodos">
+        <template v-if="item.id !== cacheTodo.id">
+          <input type="checkbox"  v-model="item.completed"> &nbsp;
+          <label>{{item.title}}</label>&nbsp;
+          <button @click="editTodo(item)">編輯</button>
+          <button @click="removeTodo(item)">刪除</button>
+        </template>
+        <input type="text"
+               v-model="cacheTitle" 
+               @keyup.esc="cancelEdit()"
+               @keyup.enter ="doneEdit(item)"
+               v-if="item.id == cacheTodo.id">
+      </li>
+    </ul>
+    <div>
+        <span>還有 {{ undoneTodos.length }} 筆任務未完成</span> &nbsp;
+        <a href="#" @click="removeAll">清除所有任務</a>
+    </div> 
+  </script>
+
+  <script>
+    const app = Vue.createApp({
+      data(){
+        return{
+          'statusList':[
+              {'name': '一切','value': 'all'},
+              {'name': '正在跑','value': 'active'},
+              {'name': '結束了','value': 'completed'}]
+        }
+      }
+    })
+    app.component('todolist', {
+      template: '#todolist',
+      props: {
+        'statusList':{
+            type: Array,
+            default: [
+              {'name': '全部','value': 'all'},
+              {'name': '進行中','value': 'active'},
+              {'name': '已完成','value': 'completed'}]
+        }, 
+        'limitNumber':{
+            type: Number,
+            default: 3
+        }
+      },
+      data(){
+        return{
+          task: '',
+          addText: '新增事項',
+          todos:[
+            {
+              id: 0,
+              title: '待辦事項1',
+              completed: true
+            }
+          ],
+          visibility: this.statusList[0].value,
+          cacheTodo: {},
+          cacheTitle: '',
+        }
+      },
+      methods: {
+        addTodo: function(){
+          var value = this.task;
+          var timeStamp = Date.now();
+          if(!value){
+            return;
+          }
+          this.todos.push({
+            id: timeStamp,
+            title: value,
+            completed: false
+          })
+          this.task = '';
+
+          if(this.todos.length > this.limitNumber){
+            this.addText = `新增事項(已超過 ${this.limitNumber}個)`
+          }
+        },
+        editTodo: function(item){
+          this.cacheTodo = item;
+          this.cacheTitle = item.title;
+        },
+        cancelEdit: function() {
+          this.initCacheTodo()
+        },
+        doneEdit: function(item) {
+          item.title = this.cacheTitle;
+          this.initCacheTodo()
+        },
+        initCacheTodo: function(){
+          this.cacheTitle = '';
+          this.cacheTodo = {}
+        },
+        removeTodo: function(todo){
+          this.todos = this.todos.filter((item) => todo.id != item.id)
+        },
+        removeAll: function(){
+          this.todos = [];
+        }
+      },
+      computed: {
+        filteredTodos : function(){
+          switch(this.visibility){
+            case 'all':
+              return this.todos;
+              break;
+            case 'active':
+              return this.todos.filter((item) => !item.completed);
+              break;
+            case 'completed':
+              return this.todos.filter((item) => item.completed);
+              break;
+          }
+        },
+        undoneTodos: function(){
+          return this.todos.filter(todo =>todo.completed != true);
+        }
+      }
+    })
+    
+    app.mount('#app')
+  </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script src="https://unpkg.com/vue@next"></script>
+
+
+
+  <div id="app">
+    <people-component :name="data.name" :friends="data.friends" ></people-component>
+  </div>
+  <script type="text/x-template" id="people">
+    <ul>
+      <li>
+        <h2>{{name}}</h2>
+        <people-component v-for="friend in friends" :name="friend.name" :friends="friend.friends" ></people-component>
+      </li>
+    </ul>
+  </script>
+  <script>
+    const app = Vue.createApp({
+      data(){
+        return {
+          data: {
+           'name': '好友清單',
+           'friends':[
+             {'name': 'john',
+              'friends':[
+                {'name': 'Tim'},
+                {'name': 'Tom'},
+              ]
+             },
+             {'name': 'May',
+              'friends':[
+                {'name': 'Jack'}
+              ]
+             }
+           ]
+          }
+        }
+      }
+    })
+    app.component('people-component', {
+      template: '#people',
+      props: ['name', 'friends']
+    })
+    app.mount('#app')
+  </script>
+
+
+
+
+
+</body>
+</html>

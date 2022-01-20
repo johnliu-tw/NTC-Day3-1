@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <style>
+
+  </style>
+  <script src="https://unpkg.com/vue@next"></script>
+
+
+
+  <div id="app">
+    <template v-for="position in positions">
+      <input type="radio" name="position" :value="position" v-model="current_position">{{ position }}
+    </template>
+    <lightbox>
+        <template v-slot:header>
+            <a>自由的燈箱首頁</a>
+        </template>
+        <template v-slot:[current_position]>
+            <button>返回</button>
+            <button>送出</button>
+        </template>
+    </lightbox>
+  </div>
+
+
+
+  
+  <script>
+    const app = Vue.createApp({
+      data(){
+        return{
+          positions: ['header', 'body', 'footer'],
+          current_position: 'footer'
+        }
+      }
+    })
+    app.component('lightbox', {
+      template: `
+      <div style="width: 200px; border:1px solid black;">
+        <div>
+          <slot name="header">
+            <h2>燈箱首頁</h2>
+          </slot>
+        </div>
+        <hr>
+        <div>
+          <slot name="body">燈箱身體</slot>
+        </div>
+        <hr>
+        <div>
+          <slot name="footer">
+            <h4>燈箱底層</h4>
+          </slot>
+        </div>
+      </div>
+      `
+    })
+
+    app.mount('#app')
+  </script>
+
+
+
+
+
+</body>
+</html>
